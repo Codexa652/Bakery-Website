@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | The Golden Crumb</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500;600&display=swap');
+
+        :root {
+            --primary-bg: #fffbf5;
+            --primary-color: #5c3d2e;
+            --secondary-color: #e08f62;
+            --text-main: #333;
+            --text-light: #666;
+            --border-color: #e0e0e0;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f7f3ec;
+            color: var(--text-main);
+        }
+
+        header {
+            background: white;
+            padding: 1.5rem 5%;
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .secure-badge {
+            color: #27ae60;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .checkout-container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 850px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            color: var(--text-light);
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: #fdfdfd;
+        }
+
+        .input-group input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(224, 143, 98, 0.1);
+            outline: none;
+        }
+
+        .card-icons {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            color: #a0a0a0;
+            font-size: 1.2rem;
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .order-summary::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .order-summary::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 5px;
+        }
+
+        .order-summary .item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .order-summary .item-info {
+            display: flex;
+            gap: 15px;
+        }
+
+        .order-summary img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        .item-title {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .item-qty {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+        }
+
+        .totals {
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+
+        .total-row.grand-total {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-top: 2px solid var(--border-color);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background: #c77b50;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(224, 143, 98, 0.4);
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .method-box {
+            flex: 1;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .method-box.active {
+            border-color: var(--secondary-color);
+            background: rgba(224, 143, 98, 0.05);
+        }
+
+        .method-box i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .method-box .title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .processing {
+            display: none;
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .spinner {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            animation: spin 1s infinite linear;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-light);
+            padding: 2rem 0;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html" class="logo">The Golden Crumb</a>
+        <div class="secure-badge"><i class="fas fa-lock"></i> Secure 256-bit Checkout</div>
+    </header>
+
+    <div class="checkout-container" id="main-checkout">
+
+        <!-- Left Column: Forms -->
+        <div class="checkout-forms">
+
+            <div class="panel">
+                <h2>1. Contact Information</h2>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="user-email" placeholder="hello@example.com" value="guest@example.com">
+                </div>
+                <div id="auth-notice" style="font-size: 0.85rem; color: var(--text-light); margin-top: -5px;">Already
+                    have an account? <a href="login.html" style="color: var(--secondary-color);">Log in</a></div>
+            </div>
+
+            <div class="panel">
+                <h2>2. Delivery Details</h2>
+                <div class="form-grid">
+                    <div class="input-group full-width">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="John Doe">
+                    </div>
+                    <div class="input-group full-width">
+                        <label>Street Address</label>
+                        <input type="text" placeholder="123 MG Road, Flat 4B">
+                    </div>
+                    <div class="input-group">
+                        <label>City</label>
+                        <input type="text" placeholder="Mumbai">
+                    </div>
+                    <div class="input-group">
+                        <label>State</label>
+                        <input type="text" placeholder="Maharashtra">
+                    </div>
+                    <div class="input-group">
+                        <label>Zip Code</label>
+                        <input type="text" placeholder="400001">
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="tel" placeholder="+91 98765 43210">
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>3. Payment Method</h2>
+                <div class="payment-methods">
+                    <div class="method-box active">
+                        <i class="fas fa-credit-card"></i>
+                        <div class="title">Credit Card</div>
+                    </div>
+                    <div class="method-box">
+                        <i class="fab fa-paypal"></i>
+                        <div class="title">PayPal</div>
+                    </div>
+                    <div class="method-box">
+                        <i class="fab fa-google-pay"></i>
+                        <div class="title">UPI / GPay</div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="input-group full-width">
+                        <label>Card Number</label>
+                        <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
+                        <div class="card-icons">
+                            <i class="fab fa-cc-visa"></i>
+                            <i class="fab fa-cc-mastercard"></i>
+                            <i class="fab fa-cc-amex"></i>
+                        </div>
+                    </div>
+                    <div class="input-group full-width">
+                        <label>Name on Card</label>
+                        <input type="text" placeholder="JOHN DOE">
+                    </div>
+                    <div class="input-group">
+                        <label>Expiration (MM/YY)</label>
+                        <input type="text" placeholder="12/26" maxlength="5">
+                    </div>
+                    <div class="input-group">
+                        <label>CVC <i class="fas fa-question-circle"
+                                style="color:var(--text-light); margin-left:5px;"></i></label>
+                        <input type="text" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Summary -->
+        <div class="checkout-summary">
+            <div class="panel" style="position: sticky; top: 100px;">
+                <h2>Order Summary</h2>
+
+                <div id="empty-cart-msg" class="empty-state">
+                    Your cart is empty.<br>
+                    <a href="index.html"
+                        style="color: var(--secondary-color); text-decoration: none; margin-top: 10px; display: inline-block;">Return
+                        to Bakery</a>
+                </div>
+
+                <div class="order-summary" id="dynamic-order-summary">
+                    <!-- Javascript populates items here -->
+                </div>
+
+                <div class="totals" id="order-totals" style="display: none;">
+                    <div class="total-row">
+                        <span>Subtotal</span>
+                        <span id="summ-subtotal">₹0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Local Delivery</span>
+                        <span id="summ-delivery">₹50.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Estimated Taxes</span>
+                        <span id="summ-tax">₹0.00</span>
+                    </div>
+                    <div class="total-row grand-total">
+                        <span>Total</span>
+                        <span id="summ-total">₹0.00</span>
+                    </div>
+                </div>
+
+                <button class="btn" id="pay-btn" onclick="processPayment()" style="display: none;">
+                    <i class="fas fa-lock"></i> Pay <span id="btn-total">₹0.00</span>
+                </button>
+                <div style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: var(--text-light);">
+                    Your payment data is encrypted and secure.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Screen -->
+    <div id="processing-screen" class="processing panel" style="max-width: 600px; margin: 100px auto;">
+        <i class="fas fa-circle-notch spinner"></i>
+        <h2>Processing your payment...</h2>
+        <p style="color: var(--text-light);">Please do not refresh or close this page.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check auth status
+            if (localStorage.getItem('goldenCrumbUser') === 'true') {
+                document.getElementById('user-email').value = "user@goldencrumb.com";
+                document.getElementById('auth-notice').innerHTML = "Welcome back! You are securely logged in.";
+            }
+
+            // Load Cart Data
+            const savedCart = localStorage.getItem('goldenCrumbCart');
+            const summaryContainer = document.getElementById('dynamic-order-summary');
+            const totalsContainer = document.getElementById('order-totals');
+            const payBtn = document.getElementById('pay-btn');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+
+            if (!savedCart || JSON.parse(savedCart).length === 0) {
+                emptyMsg.style.display = 'block';
+                return;
+            }
+
+            const cart = JSON.parse(savedCart);
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                const totalItemPrice = item.price * item.quantity;
+                subtotal += totalItemPrice;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item';
+                itemDiv.innerHTML = `
+                    <div class="item-info">
+                        <img src="${item.img}" alt="${item.title}">
+                        <div>
+                            <div class="item-title">${item.title}</div>
+                            <div class="item-qty">Qty: ${item.quantity}</div>
+                        </div>
+                    </div>
+                    <div class="item-price">₹${totalItemPrice.toFixed(2)}</div>
+                `;
+                summaryContainer.appendChild(itemDiv);
+            });
+
+            // Calculate Totals
+            const delivery = 50.00;
+            const tax = subtotal * 0.05; // 5% GST
+            const finalTotal = subtotal + delivery + tax;
+
+            document.getElementById('summ-subtotal').textContent = '₹' + subtotal.toFixed(2);
+            document.getElementById('summ-tax').textContent = '₹' + tax.toFixed(2);
+            document.getElementById('summ-total').textContent = '₹' + finalTotal.toFixed(2);
+            document.getElementById('btn-total').textContent = '₹' + finalTotal.toFixed(2);
+
+            totalsContainer.style.display = 'block';
+            payBtn.style.display = 'flex';
+        });
+
+        function processPayment() {
+            document.getElementById('main-checkout').style.display = 'none';
+            document.getElementById('processing-screen').style.display = 'block';
+
+            // Clear the cart on successful checkout
+            localStorage.removeItem('goldenCrumbCart');
+
+            setTimeout(() => {
+                document.getElementById('processing-screen').innerHTML = `
+                    <i class="fas fa-check-circle" style="font-size: 4rem; color: #2ecc71; margin-bottom: 1rem;"></i>
+                    <h2 style="color: #2ecc71; border:none;">Payment Successful!</h2>
+                    <p style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 2rem;">Order #GC-${10000 + Math.floor(Math.random() * 90000)} is confirmed.</p>
+                    <p style="color: var(--text-light); margin-bottom: 2rem;">We will start preparing your order right away.</p>
+                    <a href="index.html" class="btn" style="text-decoration: none; width: auto; display: inline-block; padding: 12px 30px;">Return to Bakery</a>
+                `;
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

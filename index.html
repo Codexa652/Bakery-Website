@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Golden Crumb | Artisanal Bakery</title>
+    <!-- Add FontAwesome for Cart Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500;600&display=swap');
+
+        :root {
+            --primary-bg: #fffbf5;
+            --primary-color: #5c3d2e;
+            --secondary-color: #e08f62;
+            --text-main: #333;
+            --text-light: #666;
+            --accent: #d4a373;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Nav */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Cart Icon */
+        .cart-icon-container {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .cart-icon-container:hover {
+            color: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #e74c3c;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-badge.bump {
+            transform: scale(1.4);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* Hero */
+        #hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        #hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease;
+        }
+
+        #hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.3s backwards;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(224, 143, 98, 0.4);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            background-color: #c77b50;
+            box-shadow: 0 6px 20px rgba(224, 143, 98, 0.6);
+        }
+
+        /* Menu Section */
+        #menu {
+            padding: 6rem 5%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: var(--primary-color);
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background: var(--secondary-color);
+            bottom: -10px;
+            left: 25%;
+            border-radius: 2px;
+        }
+
+        .menu-category {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin: 3rem 0 1.5rem;
+            text-align: left;
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 1rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .img-container {
+            overflow: hidden;
+            position: relative;
+            height: 250px;
+        }
+
+        .menu-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .menu-item:hover .menu-img {
+            transform: scale(1.08);
+        }
+
+        .quick-add {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: white;
+            color: var(--primary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+            border: none;
+            z-index: 5;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .menu-item:hover .quick-add {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quick-add:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .item-content {
+            padding: 1.5rem;
+            background: white;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-content h3 {
+            color: var(--primary-color);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-content p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+            flex-grow: 1;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .price {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .btn-outline {
+            padding: 8px 18px;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Product Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 900px;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-img {
+            width: 50%;
+            object-fit: cover;
+        }
+
+        .modal-info {
+            padding: 2.5rem;
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            line-height: 1.1;
+        }
+
+        .close-btn {
+            font-size: 2rem;
+            color: var(--text-light);
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .modal-price {
+            font-size: 1.6rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-desc {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .nutrition {
+            background: var(--primary-bg);
+            padding: 1.2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border-left: 3px solid var(--accent);
+        }
+
+        .modal-action {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Cart Sidebar */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 1001;
+            visibility: hidden;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .cart-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: white;
+            z-index: 1002;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-bg);
+        }
+
+        .cart-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .close-cart {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.2s;
+        }
+
+        .close-cart:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-items {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: var(--text-light);
+            margin-top: 3rem;
+            font-style: italic;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 1rem;
+        }
+
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .cart-item-title {
+            font-weight: 500;
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+
+        .cart-item-price {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            background: var(--primary-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+
+        .qty-btn {
+            background: none;
+            border: none;
+            padding: 5px 12px;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .qty-btn:hover {
+            background: #eee;
+        }
+
+        .qty-val {
+            padding: 0 10px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .remove-item {
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .remove-item:hover {
+            opacity: 1;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+            background: var(--primary-bg);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+        }
+
+        /* Toast Alert */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: white;
+            color: var(--primary-color);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-left: 4px solid var(--secondary-color);
+            min-width: 250px;
+            font-weight: 500;
+        }
+
+        .toast i {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4rem 5% 1rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent);
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-col p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #ddd;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #hero h1 {
+                font-size: 3rem;
+            }
+
+            .menu-toggle {
+                display: block;
+                order: -1;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            nav ul {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: 0.4s ease-in-out;
+            }
+
+            nav ul.active {
+                left: 0;
+            }
+
+            nav ul a {
+                font-size: 1.5rem;
+            }
+
+            .nav-right {
+                gap: 1rem;
+            }
+
+            .modal-content {
+                flex-direction: column;
+                max-height: 90vh;
+                overflow-y: auto;
+                width: 95%;
+            }
+
+            .modal-img {
+                width: 100%;
+                height: 300px;
+            }
+
+            .modal-info {
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            #menu {
+                padding: 4rem 5%;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        <div class="logo">The Golden Crumb</div>
+        <nav>
+            <ul id="nav-links">
+                <li><a href="#hero" onclick="toggleMenu()">Home</a></li>
+                <li><a href="#menu" onclick="toggleMenu()">Menu</a></li>
+                <!-- <li><a href="#about" onclick="toggleMenu()">About</a></li> -->
+                <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
+                <li><a href="login.html" id="nav-auth-link" onclick="handleAuthClick(event)">Login</a></li>
+            </ul>
+        </nav>
+        <div class="nav-right">
+            <div class="cart-icon-container" onclick="toggleCart()">
+                <i class="fas fa-shopping-bag"></i>
+                <div class="cart-badge" id="cart-count">0</div>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero">
+        <h1>Freshly Baked,<br>Every Single Day</h1>
+        <p>Experience the warmth of artisanal breads, delicate pastries, and custom cakes crafted with love and local
+            ingredients.</p>
+        <a href="#menu" class="btn" onclick="showToast('Browsing Menu', 'info')">Explore Our Treats</a>
+    </section>
+
+    <section id="menu">
+        <h2 class="section-title">Our Offerings</h2>
+
+        <h3 class="menu-category">Artisanal Breads</h3>
+        <div class="menu-grid" id="bread-grid">
+            <!-- Populated via JS -->
+        </div>
+
+        <h3 class="menu-category">Pastries & Viennoiserie</h3>
+        <div class="menu-grid" id="pastry-grid">
+            <!-- Populated via JS -->
+        </div>
+
+        <h3 class="menu-category">Cakes & Sweet Treats</h3>
+        <div class="menu-grid" id="cake-grid">
+            <!-- Populated via JS -->
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Visit Us</h4>
+                <p>Near Shivraj College Vadrge Road<br>Gadhinglaj, Pincode 416502<br><br>Located in Gadhinglaj, Dist - Kolhapur.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Opening Hours</h4>
+                <p><strong>Mon-Fri:</strong> 9:00 AM - 10:00 PM<br><strong>Sat:</strong> 8:00 AM - 8:00
+                    PM<br><strong>Sun:</strong> 8:00 AM - 11:00 PM</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contact & Orders</h4>
+                <p><strong>Email:</strong>  goldencrumb@gmail.com<br><strong>Phone:</strong>  +91 9966554411<br><br>Custom
+                    cake orders require 48h notice.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 The Golden Crumb Bakery. Built with ❤️ for bread lovers.</p>
+        </div>
+    </footer>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img id="modal-img" src="" alt="Product" class="modal-img">
+            <div class="modal-info">
+                <div class="modal-header">
+                    <h2 id="modal-title" class="modal-title"></h2>
+                    <span class="close-btn" onclick="closeModal(event, true)">&times;</span>
+                </div>
+                <div id="modal-price" class="modal-price"></div>
+                <p id="modal-desc" class="modal-desc"></p>
+                <div class="nutrition">
+                    <p><strong><i class="fas fa-leaf"></i> Ingredients:</strong> <span id="modal-ingredients"></span>
+                    </p>
+                    <p style="margin-top: 5px;"><strong><i class="fas fa-exclamation-circle"></i> Allergens:</strong>
+                        <span id="modal-allergens"></span>
+                    </p>
+                </div>
+                <div class="modal-action">
+                    <button class="btn" id="modal-add-btn" style="flex-grow: 1;">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar Overlay & Sidebar -->
+    <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h2>Your Order</h2>
+            <i class="fas fa-times close-cart" onclick="toggleCart()"></i>
+        </div>
+        <div class="cart-items" id="cart-items-container">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-basket" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                <p>Your cart is empty.<br>Add some delicious treats!</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price">₹0.00</span>
+            </div>
+            <button class="btn checkout-btn" onclick="checkout()"><i class="fas fa-lock"></i> Proceed to
+                Checkout</button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // --- DATA ---
+        const products = [
+            // Breads
+            {
+                id: 'ladi-pav',
+                category: 'bread',
+                title: 'Mumbai Ladi Pav',
+                price: 40.00,
+                desc: 'Classic, feather-light, and pillowy soft dinner rolls. A staple of Mumbai street food, perfect for soaking up spicy curries or enjoying with a dollop of butter.',
+                img: 'images/ladipav.png',
+                largeImg: 'images/ladipav.png',
+                ingredients: 'Maida (Refined Flour), Yeast, Sugar, Salt, Butter, Milk.',
+                allergens: 'Wheat (Gluten), Dairy'
+            },
+            {
+                id: 'masala-bread',
+                category: 'bread',
+                title: 'Spicy Masala Bread',
+                price: 60.00,
+                desc: 'A savory loaf infused with a blend of Indian spices, green chilies, cumin, and fresh coriander. Toasts beautifully for a kick of flavor with your morning chai.',
+                img: 'images/masalabread.png',
+                largeImg: 'images/masalabread.png',
+                ingredients: 'Flour, Green Chilies, Coriander, Cumin, Turmeric, Yeast, Salt.',
+                allergens: 'Wheat (Gluten)'
+            },
+            {
+                id: 'fruit-bun',
+                category: 'bread',
+                title: 'Tutti Frutti Bun',
+                price: 20.00,
+                desc: 'Nostalgic sweet buns studded with colorful candied papaya cubes (tutti frutti) and a hint of cardamom. Soft, sweet, and perfect for kids and adults alike.',
+                img: 'images/fruitbun.png',
+                largeImg: 'images/fruitbun.png',
+                ingredients: 'Flour, Sugar, Candied Fruit, Milk, Butter, Yeast.',
+                allergens: 'Wheat (Gluten), Dairy'
+            },
+
+            // Pastries
+            {
+                id: 'veg-puff',
+                category: 'pastry',
+                title: 'Vegetable Curry Puff',
+                price: 25.00,
+                desc: 'Golden, flaky puff pastry pockets filled with a spicy, savory mixture of potatoes, peas, and carrots tempered with mustard seeds and curry leaves.',
+                img: 'images/vegpuff.png',
+                largeImg: 'images/vegpuff.png',
+                ingredients: 'Flour, Butter, Potatoes, Peas, Carrots, Spices, Ginger, Garlic.',
+                allergens: 'Wheat (Gluten), Dairy'
+            },
+            {
+                id: 'paneer-puff',
+                category: 'pastry',
+                title: 'Paneer Tikka Turnover',
+                price: 45.00,
+                desc: 'A fusion delight featuring marinated paneer cubes in a smoky tikka sauce, encased in layers of buttery, crisp pastry.',
+                img: 'images/paneerpuff.png',
+                largeImg: 'images/paneerpuff.png',
+                ingredients: 'Flour, Butter, Paneer (Cottage Cheese), Yogurt, Tandoori Spices.',
+                allergens: 'Wheat (Gluten), Dairy'
+            },
+            {
+                id: 'khari',
+                category: 'pastry',
+                title: 'Maska Khari Biscuit',
+                price: 150.00,
+                desc: 'The ultimate tea-time snack. These light, airy, and salty puff pastry biscuits are baked until golden brown and are designed to be dipped in hot masala chai.',
+                img: 'images/khari.png',
+                largeImg: 'images/khari.png',
+                ingredients: 'Refined Flour, Butter/Margarine, Salt, Cumin (Jeera).',
+                allergens: 'Wheat (Gluten)'
+            },
+
+            // Cakes
+            {
+                id: 'rasmalai-cake',
+                category: 'cake',
+                title: 'Royal Rasmalai Cake',
+                price: 850.00,
+                desc: 'A luxurious fusion cake. Cardamom-scented sponge soaked in saffron milk (ras), layered with whipped cream and pistachio slivers, topped with mini rasmalai.',
+                img: 'images/rasmalaicake.png',
+                largeImg: 'images/rasmalaicake.png',
+                ingredients: 'Flour, Milk, Saffron, Cardamom, Pistachios, Almonds, Cream, Sugar.',
+                allergens: 'Wheat (Gluten), Dairy, Tree Nuts'
+            },
+            {
+                id: 'mawa-cake',
+                category: 'cake',
+                title: 'Parsi Mawa Cake',
+                price: 350.00,
+                desc: 'A dense, rich, and buttery tea cake made with reduced milk solids (khoya/mawa) and infused with cardamom and nutmeg. A classic from the Irani cafes of Bombay.',
+                img: 'images/mawacake.png',
+                largeImg: 'images/mawacake.png',
+                ingredients: 'Flour, Mawa (Milk Solids), Butter, Sugar, Eggs, Cardamom, Nutmeg.',
+                allergens: 'Wheat (Gluten), Dairy, Eggs'
+            },
+            {
+                id: 'nankhatai',
+                category: 'cake',
+                title: 'Pista Nankhatai Box',
+                price: 250.00,
+                desc: 'Traditional Indian shortbread cookies that melt in your mouth. Made with ghee, besan (gram flour), and topped with pistachios and rose petals.',
+                img: 'images/nankhatai.png',
+                largeImg: 'images/nankhatai.png',
+                ingredients: 'Refined Flour, Gram Flour (Besan), Ghee (Clarified Butter), Sugar, Pistachios, Cardamom.',
+                allergens: 'Wheat (Gluten), Dairy, Tree Nuts'
+            }
+        ];
+
+        // --- STATE ---
+        let cart = [];
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMenu();
+            checkAuth();
+
+            // Load cart from storage if any
+            const savedCart = localStorage.getItem('goldenCrumbCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartUI();
+            }
+        });
+
+        function checkAuth() {
+            const isUser = localStorage.getItem('goldenCrumbUser');
+            const authLink = document.getElementById('nav-auth-link');
+            if (isUser === 'true') {
+                authLink.textContent = 'Logout';
+            } else {
+                authLink.textContent = 'Login';
+            }
+        }
+
+        function handleAuthClick(e) {
+            const isUser = localStorage.getItem('goldenCrumbUser');
+            if (isUser === 'true') {
+                e.preventDefault();
+                localStorage.removeItem('goldenCrumbUser');
+                showToast("You have been logged out.", "info");
+                checkAuth();
+                if (window.innerWidth <= 768) toggleMenu();
+            }
+        }
+
+        function formatPrice(price) {
+            return '₹' + price.toFixed(2);
+        }
+
+        // --- RENDER MENU ---
+        function renderMenu() {
+            const grids = {
+                'bread': document.getElementById('bread-grid'),
+                'pastry': document.getElementById('pastry-grid'),
+                'cake': document.getElementById('cake-grid')
+            };
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'menu-item';
+                card.innerHTML = `
+                    <div class="img-container">
+                        <img src="${product.img}" alt="${product.title}" class="menu-img">
+                        <button class="quick-add" onclick="addToCart('${product.id}', event)" title="Quick Add to Cart">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="item-content">
+                        <h3>${product.title}</h3>
+                        <p>${product.desc.substring(0, 70)}...</p>
+                        <div class="actions">
+                            <span class="price">${formatPrice(product.price)}</span>
+                            <button class="btn-outline" onclick="openModal('${product.id}')">View</button>
+                        </div>
+                    </div>
+                `;
+                if (grids[product.category]) {
+                    grids[product.category].appendChild(card);
+                }
+            });
+        }
+
+        // --- MODAL LOGIC ---
+        const modal = document.getElementById('product-modal');
+        let currentModalProductId = null;
+
+        function openModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            currentModalProductId = id;
+            document.getElementById('modal-title').textContent = product.title;
+            document.getElementById('modal-price').textContent = formatPrice(product.price);
+            document.getElementById('modal-desc').textContent = product.desc;
+            document.getElementById('modal-img').src = product.largeImg;
+            document.getElementById('modal-ingredients').textContent = product.ingredients;
+            document.getElementById('modal-allergens').textContent = product.allergens;
+
+            // Set up button event
+            const addBtn = document.getElementById('modal-add-btn');
+            addBtn.onclick = (e) => {
+                addToCart(product.id, e);
+                closeModal(e, true);
+            };
+
+            modal.classList.add('show');
+        }
+
+        function closeModal(e, force = false) {
+            if (force || e.target === modal) {
+                modal.classList.remove('show');
+                currentModalProductId = null;
+            }
+        }
+
+        // --- CART LOGIC ---
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function addToCart(productId, event) {
+            if (event) event.stopPropagation();
+
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`${product.title} added to cart!`, 'success');
+
+            // Animate bump on badge
+            const badge = document.getElementById('cart-count');
+            badge.classList.remove('bump');
+            void badge.offsetWidth; // trigger reflow
+            badge.classList.add('bump');
+        }
+
+        function updateQuantity(productId, change) {
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity += change;
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1);
+                }
+                updateCartUI();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const badge = document.getElementById('cart-count');
+            const totalEl = document.getElementById('cart-total-price');
+
+            // Update counts
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            badge.textContent = totalItems;
+
+            // Update total price
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            totalEl.textContent = formatPrice(totalPrice);
+
+            // Render Items
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-basket" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                        <p>Your cart is empty.<br>Add some delicious treats!</p>
+                    </div>`;
+                return;
+            }
+
+            cart.forEach(item => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'cart-item';
+                itemEl.innerHTML = `
+                    <img src="${item.img}" alt="${item.title}" class="cart-item-img">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${item.title}</div>
+                        <div class="cart-item-actions">
+                            <span class="cart-item-price">${formatPrice(item.price * item.quantity)}</span>
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                                <span class="qty-val">${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                            </div>
+                            <i class="fas fa-trash remove-item" onclick="removeFromCart('${item.id}')" title="Remove"></i>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(itemEl);
+            });
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showToast("Your cart is empty!", 'error');
+                return;
+            }
+            showToast("Proceeding to secure checkout...", 'success');
+
+            // Save to localStorage for checkout page
+            localStorage.setItem('goldenCrumbCart', JSON.stringify(cart));
+
+            // Wait brief moment for toast, then redirect
+            setTimeout(() => {
+                window.location.href = 'checkout.html';
+            }, 800);
+        }
+
+        // --- TOAST SYSTEM ---
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+
+            let icon = '';
+            if (type === 'success') icon = '<i class="fas fa-check-circle" style="color: #2ecc71;"></i>';
+            else if (type === 'error') icon = '<i class="fas fa-exclamation-circle" style="color: #e74c3c;"></i>';
+            else icon = '<i class="fas fa-info-circle"></i>';
+
+            toast.innerHTML = `${icon} <span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // --- MOBILE MENU ---
+        function toggleMenu() {
+            if (window.innerWidth <= 768) {
+                const navLinks = document.getElementById('nav-links');
+                navLinks.classList.toggle('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
